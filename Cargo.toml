@@ -2,9 +2,31 @@
 name = "voronoi-generator"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
+
+[package.metadata.vcpkg]
+git = "https://github.com/microsoft/vcpkg"
+branch = "master"
+dependencies = ["glfw3", "glad", "glm"]
+
+[package.metadata.vcpkg.target]
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md", dependencies = ["glfw3", "glad", "glm"] }
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "0.8.4"
-byteorder = "1.4.3"
+rand = "*"
+byteorder = "*"
+
+[build-dependencies]
+vcpkg = "*"
+serde = "*"
+toml = "*"
+serde_derive = "*"
+gl_generator = "0.14.0"
+
+[dependencies.glfw]
+version = "*"
+default-features = false
+
+

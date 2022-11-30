@@ -1,12 +1,24 @@
-mod voronoi;
-use voronoi::seed;
-use voronoi::export;
+extern crate core;
 
-const AMOUNT: usize = 20;
-const WIDTH:  usize = 1000;
-const HEIGHT: usize = 1000;
+mod display;
+
+use crate::display::Display;
+use crate::display::window_config::DEFAULT;
+
+mod gl {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 
 fn main() {
-    let map: Vec<Vec<u32>> = seed::generate(AMOUNT, WIDTH, HEIGHT);
-    export::export_image("test.ppm", map, WIDTH, HEIGHT);
+    let mut s_display = Display::create(DEFAULT);
+
+    gl::load_with(|s| s_display.window.get_proc_address(s) as *const _);
+    unsafe {
+        println!("{}", gl::GetError());
+    }
+
+
+    while !s_display.window.should_close() {
+        s_display.update();
+    }
 }
